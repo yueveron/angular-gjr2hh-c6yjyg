@@ -1,0 +1,31 @@
+<h2>Products</h2>
+<!-- 循环语句 -->
+<div *ngFor="let product of products; index as productId">
+  <h3>
+    <!-- 属性绑定语法 [] 则允许你在模板表达式中使用属性值 -->
+     <a [title]="product.name + ' details'" [routerLink]="['/products', productId]">
+       <!-- 插值 {{}} 允许你把属性值渲染为文本 -->
+      {{ product.name }} 
+    </a>
+  </h3>
+  
+  <!-- 条件语句 -->
+  <p *ngIf="product.description">
+    Description: {{ product.description }}
+  </p>
+
+  <!-- 把 button 的 click 事件绑定到我们替你定义好的 share() 方法上（位于 product-list.component.ts ）。
+  事件绑定是通过把事件名称包裹在圆括号 ( ) 中完成的 -->
+  <button (click)="share()">
+    Share
+  </button>
+
+  <app-product-alerts [product]="product" (notify)="onNotify()">></app-product-alerts>
+</div>
+
+
+<!-- 
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->
