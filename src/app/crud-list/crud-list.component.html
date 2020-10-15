@@ -22,7 +22,7 @@
       <td>{{ data.age }}</td>
       <td>{{ data.address }}</td>
       <td>
-        <button nz-button (click)="onEditModal('event', data)">Update</button>
+        <button nz-button (click)="onEditModal('update', data)">Update</button>
         <nz-divider nzType="vertical"></nz-divider>
         <button nz-button>Delete</button>
       </td>
@@ -31,4 +31,5 @@
 </nz-table>
 
 <!-- Modal 组件 -->
-<eventedit-modal (okCallback)="onRefreshList()"></eventedit-modal>
+<!-- 父层接收子层参数，通过 $event 对象来获取 payload 对象，必须为 $event，不能改名 -->
+<eventedit-modal (okCallback)="onRefreshList($event)"></eventedit-modal>

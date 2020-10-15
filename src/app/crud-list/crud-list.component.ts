@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EventEditModal } from '../layer/modal/event-edit/event-edit.component'
 
+import { get, cloneDeep, findIndex } from 'lodash';
+
 @Component({
   selector: 'app-crud-list',
   templateUrl: './crud-list.component.html',
@@ -36,16 +38,26 @@ export class CrudListComponent implements OnInit {
   }
 
   onAddNew(): void{
-    console.debug('click add new')
+    // console.debug('click add new')
     this.EventEditModal.showAddModal();
   }
 
   onEditModal(type = 'event', data: any): void {
-    console.debug('data:', data)
+    // console.debug('data:', data)
+    this.EventEditModal.showUpdateModal(type, data);
   }
 
-  onRefreshList(): void{
-    console.debug('onCallback::RefeashList')
+  onRefreshList(res: any): void{
+    // console.debug('onCallback::RefeashList:', res, this.listOfData)
+    const newItem = cloneDeep(res.data);
+    if(res.modeType === 'add'){
+      newItem.key = this.listOfData.length+1
+      this.listOfData.push(newItem)
+    }else if(res.modeType === 'update'){
+      const itemIndex = findIndex(this.listOfData, {key:newItem.key})
+      // Replace item at index using native splice
+      this.listOfData.splice(itemIndex, 1, newItem);
+    }
   }
 
 }

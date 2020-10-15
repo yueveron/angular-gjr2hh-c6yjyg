@@ -3,6 +3,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { get, cloneDeep } from 'lodash';
 
 const initFormData = {
+  key: '',
   name: 'Test Name',
   age: '100',
   address: 'Haizhu'
@@ -20,7 +21,7 @@ const initFormData = {
   >
     <ng-template #modalContent>
       <form nz-form>
-        <ng-container *ngIf="modalType === 'add'">
+        <ng-container>
             <div nz-form-item nz-row>
                 <div nz-form-label nz-col [nzSm]="4" [nzXs]="24">
                     <label nz-form-item-required>Name:</label>
@@ -71,6 +72,7 @@ export class EventEditModal implements OnInit {
 
   // 新增
   showAddModal() {
+    this.formData = cloneDeep(initFormData);
     console.debug('showAddModal:', this.formData)
     this.modalType = 'add';
     this.modalTitle = '新增热点';
@@ -78,11 +80,12 @@ export class EventEditModal implements OnInit {
   }
 
   // 编辑
-  showUpdateModal(modalType = 'event', data: any = {}) {
-    this.modalTitle = '编辑热点';
+  showUpdateModal(modalType = 'update', data: any = {}) {
     this.modalType = modalType;
+    this.modalTitle = '编辑热点';
     // 表单参数
     this.formData = {
+      key: data.key,
       name: data.name,
       age: data.age,
       address: data.address
@@ -100,14 +103,18 @@ export class EventEditModal implements OnInit {
   handleOk(e) {
     e && e.preventDefault && e.preventDefault();
     //
-    this.handleOkCb(this.formData);    
+    const res = {
+      modeType: this.modalType,
+      data: this.formData
+    }
+    this.handleOkCb(res);
   }
 
   // 点击确定回调
   handleOkCb(res) {
     this.isVisible = false;
-    this.okCallback.emit();
-    console.debug('handleOkCb:', res)
+    this.okCallback.emit(res);
+    // console.debug('handleOkCb:', res)
   }
 
 }
